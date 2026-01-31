@@ -1,0 +1,49 @@
+{
+  "summary": {
+    "total_findings": 2,
+    "high_confidence": 0
+  },
+  "capabilities": {
+    "executed": [
+      {
+        "name": "static_scan",
+        "reason": "fixture"
+      }
+    ],
+    "skipped": []
+  },
+  "entries": [
+    {
+      "finding_id": "c712cda35049",
+      "title": "Reentrancy in withdraw",
+      "category": "reentrancy",
+      "severity": "high",
+      "confidence": "medium",
+      "evidence_strength": "medium",
+      "evidence_points": 2,
+      "reproducible": false,
+      "status": "unknown",
+      "score_total": 8,
+      "source_tool": "slither",
+      "artifact_paths": [
+        "artifacts/slither.json"
+      ]
+    },
+    {
+      "finding_id": "d75168a757b5",
+      "title": "Unchecked return",
+      "category": "unchecked_return",
+      "severity": "medium",
+      "confidence": "medium",
+      "evidence_strength": "high",
+      "evidence_points": 3,
+      "reproducible": true,
+      "status": "unknown",
+      "score_total": 8,
+      "source_tool": "slither",
+      "artifact_paths": [
+        "artifacts/slither.json"
+      ]
+    }
+  ]
+}

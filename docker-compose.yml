@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  ralph:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      BUDGET_TOKEN_LIMIT: "0"
+      BUDGET_COST_LIMIT_USD: "0.0"
+      BUDGET_TIME_LIMIT_SECONDS: "0"
+      VLLM_BASE_URL: "${VLLM_BASE_URL:-}"
+      VLLM_MODEL: "${VLLM_MODEL:-}"
+      VLLM_API_KEY: "${VLLM_API_KEY:-}"
+    volumes:
+      - ./artifacts:/app/artifacts
+      - .:/app
+    working_dir: /app
+    command: ["python", "-m", "ralph_wiggum.cli", "audit", "."]
+
+  slither:
+    image: trailofbits/slither:latest
+    volumes:
+      - ./artifacts:/work/artifacts
+      - .:/work
+    working_dir: /work
+    command: ["slither", ".", "--json", "artifacts/slither.json"]
+
+  foundry:
+    image: ghcr.io/foundry-rs/foundry:latest
+    volumes:
+      - ./artifacts:/work/artifacts
+      - .:/work
+    working_dir: /work
+    environment:
+      FOUNDRY_FUZZ_RUNS: "256"
+    command: ["forge", "test", "--fuzz-runs", "256"]
+
+  solodit:
+    image: curlimages/curl:latest
+    volumes:
+      - ./artifacts:/work/artifacts
+    working_dir: /work
+    command: ["sh", "-c", "while true; do echo 'solodit stub'; sleep 3600; done"]
+
+  vllm:
+    image: vllm/vllm-openai:latest
+    profiles: ["gpu"]
+    environment:
+      VLLM_MODEL: "${VLLM_MODEL:-}"
+    volumes:
+      - ./artifacts:/work/artifacts
+    ports:
+      - "8000:8000"

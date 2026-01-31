@@ -1,0 +1,35 @@
+{
+  "results": {
+    "detectors": [
+      {
+        "check": "reentrancy-eth",
+        "impact": "High",
+        "confidence": "Medium",
+        "description": "Reentrancy issue.",
+        "elements": [
+          {
+            "name": "withdraw",
+            "source_mapping": {
+              "filename_absolute": "contracts/Vault.sol",
+              "lines": [42]
+            }
+          }
+        ]
+      },
+      {
+        "check": "unchecked-return",
+        "impact": "Medium",
+        "confidence": "Low",
+        "description": "Unchecked return value.",
+        "elements": []
+      },
+      {
+        "check": "low-level-calls",
+        "impact": "Medium",
+        "confidence": "Low",
+        "description": "Low-level call usage.",
+        "elements": []
+      }
+    ]
+  }
+}

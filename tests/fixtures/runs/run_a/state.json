@@ -1,0 +1,34 @@
+{
+  "capabilities": {
+    "executed": [
+      {"name": "static_scan", "reason": "fixture"}
+    ],
+    "skipped": []
+  },
+  "budget": {"cap": 5, "spent": 1},
+  "static_scan": {
+    "findings": [
+      {
+        "category": "reentrancy",
+        "description": "Reentrancy in withdraw",
+        "impact": "High",
+        "confidence": "Medium",
+        "source_tool": "slither",
+        "artifact_paths": ["artifacts/slither.json"],
+        "path": "contracts/Vault.sol",
+        "lines": [42]
+      },
+      {
+        "category": "unchecked_return",
+        "description": "Unchecked return",
+        "impact": "Medium",
+        "confidence": "Medium",
+        "source_tool": "slither",
+        "artifact_paths": ["artifacts/slither.json"],
+        "path": "contracts/Vault.sol",
+        "lines": [10],
+        "repro_steps": "Run fuzz tests"
+      }
+    ]
+  }
+}
