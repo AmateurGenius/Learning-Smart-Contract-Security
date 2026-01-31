@@ -1,0 +1,36 @@
+{
+  "functions": [
+    {
+      "name": "withdraw",
+      "visibility": "public",
+      "state_mutability": "nonpayable",
+      "elements": [
+        {
+          "source_mapping": {
+            "filename_absolute": "contracts/Vault.sol",
+            "lines": [12]
+          }
+        }
+      ]
+    },
+    {
+      "name": "balanceOf",
+      "visibility": "public",
+      "state_mutability": "view",
+      "elements": []
+    },
+    {
+      "name": "adminSet",
+      "visibility": "external",
+      "state_mutability": "nonpayable",
+      "elements": [
+        {
+          "source_mapping": {
+            "filename": "contracts/Admin.sol",
+            "lines": [8]
+          }
+        }
+      ]
+    }
+  ]
+}

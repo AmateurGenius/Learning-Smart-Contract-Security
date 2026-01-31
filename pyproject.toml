@@ -1,0 +1,20 @@
+[project]
+name = "ralph-wiggum"
+version = "0.1.0"
+description = "Autonomous multi-agent smart contract auditor skeleton."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Ralph Wiggum Contributors" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+graph = ["networkx>=3.0"]
+
+[project.scripts]
+ralph = "ralph_wiggum.cli:main"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]

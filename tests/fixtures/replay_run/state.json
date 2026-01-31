@@ -1,0 +1,51 @@
+{
+  "status": "completed",
+  "target_path": "contracts",
+  "capabilities": {
+    "executed": [{"name": "static_scan", "reason": "fixture"}],
+    "skipped": []
+  },
+  "static_scan": {
+    "signals": {
+      "reentrancy": 1,
+      "unchecked_return": 0,
+      "delegatecall": 0
+    },
+    "evidence": [
+      {"category": "reentrancy", "path": "contracts/Vault.sol"}
+    ],
+    "findings": [
+      {
+        "category": "reentrancy",
+        "check": "reentrancy-eth",
+        "description": "Reentrancy in withdraw",
+        "impact": "high",
+        "confidence": "high",
+        "source_tool": "slither",
+        "artifact_paths": [
+          "tests/fixtures/replay_run/artifacts/slither.json",
+          "tests/fixtures/replay_run/artifacts/slither.log"
+        ]
+      }
+    ],
+    "artifacts": {
+      "slither_json": "tests/fixtures/replay_run/artifacts/slither.json",
+      "slither_log": "tests/fixtures/replay_run/artifacts/slither.log"
+    },
+    "artifact_paths": [
+      "tests/fixtures/replay_run/artifacts/slither.json",
+      "tests/fixtures/replay_run/artifacts/slither.log"
+    ]
+  },
+  "findings": [
+    {
+      "category": "fuzz",
+      "description": "Fuzz failure in testWithdraw",
+      "severity": "medium",
+      "confidence": "medium",
+      "source_tool": "foundry",
+      "artifact_paths": ["tests/fixtures/replay_run/artifacts/foundry_fuzz.log"],
+      "repro_steps": "forge test --match testWithdraw"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "capabilities": {
+    "executed": [
+      {"name": "static_scan", "reason": "fixture"}
+    ],
+    "skipped": []
+  },
+  "budget": {"cap": 5, "spent": 2},
+  "static_scan": {
+    "findings": [
+      {
+        "category": "reentrancy",
+        "description": "Reentrancy in withdraw",
+        "impact": "High",
+        "confidence": "High",
+        "source_tool": "slither",
+        "artifact_paths": ["artifacts/slither.json"],
+        "path": "contracts/Vault.sol",
+        "lines": [42]
+      }
+    ]
+  }
+}
