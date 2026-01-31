@@ -1,0 +1,59 @@
+name: Ralph Wiggum CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-test-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Docker (already present on ubuntu-latest, but this ensures buildx)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Build docker compose services
+      - name: Build Docker services
+        run: |
+          docker compose build
+
+      # 4. Start docker compose services
+      - name: Start Docker services
+        run: |
+          docker compose up -d
+          docker compose ps
+
+      # 5. Run pytest inside the Ralph container
+      - name: Run test suite
+        run: |
+          docker compose exec -T ralph pytest -q
+
+      # 6. Run demo audit pipeline
+      - name: Run Ralph demo pipeline
+        run: |
+          rm -rf artifacts || true
+          mkdir -p artifacts
+          docker compose exec -T ralph ralph audit tests/fixtures/contracts
+          docker compose exec -T ralph ralph workbench tests/fixtures/contracts || true
+          docker compose exec -T ralph ralph entrypoints tests/fixtures/contracts || true
+
+      # 7. Upload artifacts as GitHub Actions artifact
+      - name: Upload audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ralph-wiggum-artifacts
+          path: artifacts
+          if-no-files-found: error
+
+      # 8. Tear down containers (always run)
+      - name: Shutdown Docker services
+        if: always()
+        run: |
+          docker compose down -v
