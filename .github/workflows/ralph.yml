@@ -1,0 +1,48 @@
+name: Ralph Wiggum Auditor
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run Ralph Wiggum
+        run: python run.py || true
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ralph-report
+          path: artifacts/report.md
+
+  server-tools:
+    # Intended for GPU/server runners with Slither/Foundry enabled in the future.
+    if: ${{ env.ENABLE_SLITHER == '1' && env.ENABLE_FOUNDRY == '1' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run Ralph Wiggum
+        run: python run.py || true

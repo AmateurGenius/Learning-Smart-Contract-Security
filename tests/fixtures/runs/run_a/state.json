@@ -1,0 +1,39 @@
+{
+  "capabilities": {
+    "executed": {
+      "static_scan": {
+        "started_at": "2024-01-01T00:00:00+00:00",
+        "finished_at": "2024-01-01T00:00:01+00:00",
+        "artifact_paths": ["artifacts/slither.json"],
+        "status": "success"
+      }
+    },
+    "skipped": {}
+  },
+  "budget": {"cap": 5, "spent": 1},
+  "static_scan": {
+    "findings": [
+      {
+        "category": "reentrancy",
+        "description": "Reentrancy in withdraw",
+        "impact": "High",
+        "confidence": "Medium",
+        "source_tool": "slither",
+        "artifact_paths": ["artifacts/slither.json"],
+        "path": "contracts/Vault.sol",
+        "lines": [42]
+      },
+      {
+        "category": "unchecked_return",
+        "description": "Unchecked return",
+        "impact": "Medium",
+        "confidence": "Medium",
+        "source_tool": "slither",
+        "artifact_paths": ["artifacts/slither.json"],
+        "path": "contracts/Vault.sol",
+        "lines": [10],
+        "repro_steps": "Run fuzz tests"
+      }
+    ]
+  }
+}

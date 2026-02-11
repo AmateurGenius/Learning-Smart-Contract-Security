@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master", "work"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker Compose diagnostics
+        run: |
+          docker compose version
+          docker compose config --services
+          docker compose config
+
+      - name: Build containers
+        run: docker compose build
+
+      - name: Start containers
+        run: docker compose up -d
+
+      - name: Docker Compose status
+        run: |
+          docker compose ps
+          docker ps -a
+
+      - name: Prepare artifacts directory
+        run: mkdir -p artifacts
+
+      - name: Compute diff refs
+        run: |
+          echo "BASE_REF=$(git -C tests/fixtures/diff_repo rev-list --max-parents=0 HEAD)" >> "$GITHUB_ENV"
+          echo "HEAD_REF=$(git -C tests/fixtures/diff_repo rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Run tests in container
+        run: >
+          docker compose run --rm -T ralph
+          sh -lc "pip install -e '.[dev]' && pytest -q"
+
+      - name: Run demo commands
+        run: |
+          docker compose run --rm -T ralph ralph audit tests/fixtures/contracts
+          docker compose run --rm -T ralph ralph workbench tests/fixtures/contracts || true
+          docker compose run --rm -T ralph ralph entrypoints tests/fixtures/contracts
+          docker compose run --rm -T ralph ralph diff "$BASE_REF" "$HEAD_REF" --target tests/fixtures/diff_repo/contracts
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artifacts
+          path: artifacts
+          if-no-files-found: error
+
+      - name: Docker logs on failure
+        if: failure()
+        run: |
+          docker compose logs --no-color --tail=300
+          docker ps -a
+
+      - name: Shutdown containers
+        if: always()
+        run: docker compose down -v

@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "pattern_matches": [
+    {
+      "category": "reentrancy",
+      "title": "External call before state update",
+      "confidence": "medium",
+      "reference": "SOL-001"
+    }
+  ]
+}
